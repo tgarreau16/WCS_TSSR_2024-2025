@@ -11,11 +11,12 @@ alias
 cat  
 
 #### Commandes PowerShell
-cp  
-rm  
-cd  
-mkdir  
-man  
-history  
-alias  
-cat  
+cp : Copy-Item 
+rm  : Remove-Item
+cd  : Set-Location
+mkdir  : md  
+man  : help 
+history  : history 
+alias  : Alias 
+cat  : Get-Content
+pwd : Get-Location 
