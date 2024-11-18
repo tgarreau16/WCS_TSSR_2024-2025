@@ -79,6 +79,23 @@ fixed-address 172.20.0.10;
 }
 ```
 
+Enregistrer puis fermer et redémarrer le service DHCP : 
 
+```
+service isc-dhcp-server restart
+```
+
+Puis effectuez les commandes suivantes sur le client : 
+
+```
+ifdown enp0s3
+ifup enp0s3
+```
+
+Verification de l'adresse IP statique attribuée à son adresse MAC :
+
+Entrez la commande `ip a`
+
+![DHCP_ip MAC 2024-11-18 110409](https://github.com/user-attachments/assets/8037246b-98b6-46ef-a71a-f982599ed0d3)
 
 
