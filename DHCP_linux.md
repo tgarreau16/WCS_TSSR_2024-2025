@@ -1,34 +1,61 @@
-Configuration d'un service DHCP 
+Configuration d'un service DHCP, pour simplifier, agissez en tant que compte système ( ROOT )
 
-
-VM serveur Ubuntu 
+VM serveur Ubuntu       
 VM client Debian 
+
+**Configuration de l'adresse IPv4**
+
+Pour définir l'adresse IPv4 fixe du serveur, editer le fichier ``/etc/network/interfaces``                          
+```#The primary network interface
+allow-hotplug enp0s3
+iface enp0s3 inet static
+        address 172.20.0.2
+        gateway 172.20.0.1
+```
+Redémarrer la carte réseau et actualiser son adresse fixe en utilisant la commande 
+```systemctl restart networking.service```
 
 Ensuite il faut installer le paquet suivant :
 
-"bash
-apt-get install isc-dhcp-server"
+```
+apt-get install isc-dhcp-server
+```
 
-- Une fois installé, il faut éditer le fichier suivant :
+Une fois installé, éditer le fichier suivant :
 
-```bash
+```
 nano /etc/default/isc-dhcp-server
 ```
+Dans ce même fichier, il faut indiquer quelle interface réseau à utiliser :
 
-- Dans ce fichier, à la ligne ci-dessous, il faut indiquer quelle interface réseau nous allons utiliser :
+```ìp a```
 
-```bash
-INTERFACESv4=""
+```
+INTERFACESv4="enp0s3"
+```
+Editer le fichier avec la commande ```nano /etc/dhcp/dhcpd.conf``` pour indiquer les configurations IP à fournir.
+
+```
+# Notre configuration pour le réseau 172.20.0.0
+subnet 172.20.0.0 netmask 255.255.255.0 {
+range 172.20.0.100 172.20.0.200;
+#option domain-name-servers 8.8.8.8;
+#option domain-name "reseau.lan";
+#option routers 172.18.0.1;
+#option broadcast-address 172.18.255.255;
+default-lease-time 600;
+max-lease-time 7200;
+}
 ```
 
-- Dans mon cas, l'interface réseau est la suivante (vous pouvez la trouver avec un ip a dans le terminal de votre machine) :
+Après avoir modifié le fichier, redemarrer le service DHCP 
 
-```bash
-INTERFACESv4="enp0s8"
+```
+service isc-dhcp-server restart
 ```
 
-- Dans le prochain fichier à éditer, nous allons indiquer les configurations IP à fournir :
-
-```bash
-nano /etc/dhcp/dhcpd.conf
 ```
+ifup enp0s3
+ifdown enp0s3
+```
+
